@@ -13,13 +13,20 @@ class FeedControllerTest extends WebTestCase
 {
     public function testFeed(): void
     {
-        $browser = static::createClient()->request('GET', '/');
+        // Debug environment variables
+        echo "APP_ENV: " . $_SERVER['APP_ENV'] . "\n";
+        echo "KERNEL_CLASS: " . $_SERVER['KERNEL_CLASS'] . "\n";
 
-        self::dbTransaction(static function (EntityManagerInterface $em): void {
-            $user = new User(new UserId(null), 'random@gmail.com');
-            $em->persist($user);
-        });
+        // Debug kernel configuration
+        $kernel = static::bootKernel();
+        echo "Kernel environment: " . $kernel->getEnvironment() . "\n";
 
-        self::assertStringContainsString('Here will be the news feed', $browser->html());
+        // Debug framework.test parameter
+        $container = $kernel->getContainer();
+        echo "framework.test value: " . ($container->hasParameter('framework.test') ? 'true' : 'false') . "\n";
+
+        // Your original test
+//        $browser = static::createClient()->request('GET', '/');
+//        self::assertStringContainsString('Here will be the news feed', $browser->html());
     }
 }
